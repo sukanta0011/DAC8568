@@ -55,12 +55,12 @@ the Arduino IDE. `#include "DAC8568.h"` becomes available in any sketch.
 #include <SPI.h>
 #include "DAC8568.h"
 
-DAC8568 dac(10);   // CS on pin 10, default 1MHz SPI clock
+DAC8568 dac(10);   // CS on pin 10, default SPI clock 1MHz and resolution is 16 bits
 
 void setup() {
     SPI.begin();
     dac.powerUpChannel(0);
-    dac.setChannel(0, 30000);   // channel 0, mid-scale-ish value
+    dac.setChannel(0, 30000);   // channel 0, value
 }
 
 void loop() {}

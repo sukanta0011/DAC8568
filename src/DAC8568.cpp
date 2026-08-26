@@ -4,17 +4,18 @@
 //---------------------------------------//
 //            Constructor                //
 //---------------------------------------//
-DAC8568::DAC8568(uint8_t chipSelectPin, uint32_t clockSpeed)
+DAC8568::DAC8568(uint8_t chipSelectPin, uint32_t clockSpeed, uint8_t resolution)
 {
     _csPin = chipSelectPin;
     pinMode(_csPin, OUTPUT);
     digitalWrite(_csPin, HIGH);   // CS idle-high (active-low chip select)
 
-    // SPI_MODE1 confirmed against real hardware — the chip did not respond
-    // correctly under MODE0, despite the command word itself being verified
-    // correct via showDataBits() first. Do not change without re-testing on
-    // hardware.
+    // SPI_MODE1 confirmed against real hardware.
+    // For chip DAC8168, DAC7568, provide resolution value
     _spiSettings = SPISettings(clockSpeed, MSBFIRST, SPI_MODE1);
+    if (resolution < 16){
+        _data_shifting_bits = 16 - resolution;
+    }
 }
 
 
@@ -130,8 +131,7 @@ void    DAC8568::showDataBits(uint32_t data)
     Serial.print("\n");
 }
 
-// Shared bit-packing for powerUp/powerDownChannel(All) — see datasheet's
-// power-down command table for the field layout.
+
 void DAC8568::setPowerState(uint32_t powerMode, uint8_t channelMask)
 {
     uint32_t bitMap = 0;
@@ -142,19 +142,14 @@ void DAC8568::setPowerState(uint32_t powerMode, uint8_t channelMask)
     writeData(bitMap);
 }
 
-// Shared bit-packing for setChannel/setAllChannel — see datasheet's
-// "write to input/DAC register" command table for the field layout.
-// Values are explicitly cast to uint32_t before shifting: on AVR (int is
-// 16 bits) shifting a promoted uint8_t/uint16_t by >=16 is undefined
-// behavior and silently drops the upper bits — confirmed the hard way on
-// real hardware before this fix was added. Do not remove the casts.
+
 void DAC8568::setDacValue(uint8_t channelField, uint16_t value)
 {
     uint32_t bitMap = 0;
 
     bitMap |= (CTRL_REG & 0x0F) << 24;
     bitMap |= (uint32_t)channelField << 20;
-    bitMap |= (uint32_t)value << 4;
+    bitMap |= (uint32_t)value << (4 + _data_shifting_bits);
     bitMap |= (FEAT_REF_UP & 0x0F);
     writeData(bitMap);
 }

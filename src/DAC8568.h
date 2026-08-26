@@ -47,7 +47,7 @@
 class DAC8568
 {
     private:
-        uint8_t     _csPin;
+        uint8_t     _csPin, _data_shifting_bits;
         SPISettings _spiSettings;
         // Software-side bookkeeping only — mirrors what commands we've SENT to
         // the chip, not a read-back of the chip's actual state (this chip's
@@ -71,7 +71,10 @@ class DAC8568
     public:
         // clockSpeed defaults to 1MHz; raise it if the datasheet's max SPI
         // clock for your supply voltage allows and you need faster updates.
-        DAC8568(uint8_t chipSelectPin, uint32_t clockSpeed = 1000000);
+        DAC8568(
+            uint8_t chipSelectPin,
+            uint32_t clockSpeed = 1000000,
+            uint8_t resolution = 16);
 
         // Copying is disabled: two DAC8568 objects both believing they own
         // the same physical CS pin (and independently tracking reference
