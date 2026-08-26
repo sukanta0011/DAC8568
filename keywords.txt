@@ -1,0 +1,29 @@
+#######################################
+# Syntax Coloring Map for DAC8568
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+DAC8568	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+setChannel	KEYWORD2
+setAllChannel	KEYWORD2
+powerUpChannel	KEYWORD2
+powerUpAllChannel	KEYWORD2
+powerDownChannel	KEYWORD2
+powerDownAllChannel	KEYWORD2
+enableInternalRefStatic	KEYWORD2
+disableInternalRefStatic	KEYWORD2
+enableInternalRefFlexible	KEYWORD2
+disableInternalRefFlexible	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
