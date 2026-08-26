@@ -22,6 +22,7 @@
 #ifndef DAC8568_H
 # define DAC8568_H
 
+# include "Arduino.h"
 # include <SPI.h>
 
 // -- Control register values --------------------------------------------
