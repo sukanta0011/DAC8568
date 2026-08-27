@@ -48,7 +48,7 @@
 class DAC8568
 {
     private:
-        uint8_t     _csPin, _data_shifting_bits;
+        uint8_t     _csPin, _data_shifting_bits = 0;
         SPISettings _spiSettings;
         // Software-side bookkeeping only — mirrors what commands we've SENT to
         // the chip, not a read-back of the chip's actual state (this chip's
